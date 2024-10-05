@@ -95,5 +95,34 @@ BEGIN
 END
 $$
 
+
+DO
+$$
+DECLARE
+
+BEGIN
+
+END;
+$$
+
+-- Prints Integers
+-- btw -50 and +50
+
+-- Vanilla LOOP
+DO
+$$
+DECLARE
+ counter INT := -51;
+BEGIN
+ RAISE NOTICE 'Basic LOOP';
+ LOOP 
+  counter = counter + 1;
+  RAISE NOTICE '%',counter;
+  EXIT WHEN counter = 50;
+ END LOOP;
+END;
+$$
+
+
 -- ### 1.1 ENDS ### ---
 
