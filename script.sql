@@ -7,7 +7,7 @@
 
 -- ### 1.1 BEGINS ### ---
 
--- LOOP
+-- Vanilla LOOP
 DO 
 $$ 
 DECLARE
@@ -70,8 +70,30 @@ BEGIN
 END;
 $$
 
-
-
+-- FOR EACH LOOP
+DO
+$$
+DECLARE
+   numeros_0a100 INT[] := ARRAY[0];
+   numero INT;
+   evenNumber INT;
+BEGIN
+  -- Creates an array 
+  -- filled 1to100 integers.
+  FOR i IN 0..100 LOOP
+    numeros_0a100[i] := i;
+  END LOOP;
+   
+  -- Iterate thru. the int array
+  FOREACH numero IN ARRAY numeros_0a100 LOOP
+    SELECT MOD(numero,2) INTO evenNumber;
+	-- Prints if the # is even
+    IF evenNumber = 0 THEN
+      RAISE NOTICE '%',numeros_0a100[numero];
+	END IF;
+  END LOOP;
+END
+$$
 
 -- ### 1.1 ENDS ### ---
 
