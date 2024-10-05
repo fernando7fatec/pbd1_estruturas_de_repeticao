@@ -96,14 +96,7 @@ END
 $$
 
 
-DO
-$$
-DECLARE
 
-BEGIN
-
-END;
-$$
 
 -- Prints Integers
 -- btw -50 and +50
@@ -123,6 +116,44 @@ BEGIN
 END;
 $$
 
+-- While LOOP
+DO
+$$
+DECLARE
+ counter INT := -51;
+BEGIN
+ RAISE NOTICE 'Basic LOOP';
+ WHILE counter <= 50 LOOP 
+  counter = counter + 1;
+  RAISE NOTICE '%',counter;
+ END LOOP;
+END;
+$$
+
+-- FOR LOOP
+DO
+$$
+DECLARE
+ counter INT := -51;
+BEGIN
+ RAISE NOTICE 'Basic LOOP';
+ FOR i IN -50..50 LOOP 
+   RAISE NOTICE '%',i;
+ END LOOP;
+END;
+$$
+
+
 
 -- ### 1.1 ENDS ### ---
+
+
+DO
+$$
+DECLARE
+
+BEGIN
+
+END;
+$$
 
