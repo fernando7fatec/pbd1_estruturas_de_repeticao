@@ -1,4 +1,16 @@
 -- ***********************
+-- ToolBox 
+-- A function that generates
+-- random numbers
+-- ***********************
+CREATE OR REPLACE FUNCTION valor_aleatorio_entre(lim_inferior INT, lim_superior INT) RETURNS INT AS
+$$
+BEGIN
+RETURN FLOOR(RANDOM() * (lim_superior - lim_inferior + 1) + lim_inferior)::INT; END;
+$$ LANGUAGE plpgsql;
+
+
+-- ***********************
 -- 1.1 
 -- Resolva 
 -- https://www.beecrowd.com.br/judge/pt/problems/view/1059
@@ -96,6 +108,95 @@ END
 $$
 
 -- ****************
+-- Read 6 numbers
+-- print how many 
+-- positive numbers 
+-- among them.
+-- https://judge.beecrowd.com/en/problems/view/1060
+-- ****************
+DO
+$$
+DECLARE 
+ num_positivos INT := 0;
+ numero INT := 0;
+ n INT;
+BEGIN
+  FOR n IN 1..6 LOOP
+   numero = valor_aleatorio_entre(-50,50);
+   RAISE NOTICE 'Num aleatorios %',numero;
+   IF numero > 0 THEN
+     num_positivos = num_positivos + 1;
+   END IF;
+  END LOOP;
+  RAISE NOTICE 'Total de Numeros positivos: %',num_positivos;
+END
+$$
+
+-- Vanilla LOOP
+DO
+$$
+DECLARE 
+ num_positivos INT := 0;
+ numero INT := 0;
+ contador INT := 0;
+BEGIN
+  LOOP 
+   contador = contador + 1;
+   numero = valor_aleatorio_entre(-50,50);
+   RAISE NOTICE 'Num aleatorios %',numero;
+   IF numero > 0 THEN
+     num_positivos = num_positivos + 1;
+   END IF;
+   EXIT WHEN contador = 6;
+  END LOOP;
+  RAISE NOTICE 'Total de Numeros positivos: %',num_positivos;
+END
+$$
+
+-- While LOOP
+DO
+$$
+DECLARE 
+ num_positivos INT := 0;
+ numero INT := 0;
+ contador INT := 0;
+BEGIN
+  WHILE contador <= 6 LOOP 
+   contador = contador + 1;
+   numero = valor_aleatorio_entre(-50,50);
+   RAISE NOTICE 'Num aleatorios %',numero;
+   IF numero > 0 THEN
+     num_positivos = num_positivos + 1;
+   END IF;
+  END LOOP;
+  RAISE NOTICE 'Total de Numeros positivos: %',num_positivos;
+END
+$$
+
+-- ForEach LOOP
+DO
+$$
+DECLARE 
+ num_positivos INT := 0;
+ numero INT := 0;
+ contador INT := 0;
+BEGIN
+  WHILE contador <= 6 LOOP 
+   contador = contador + 1;
+   numero = valor_aleatorio_entre(-50,50);
+   RAISE NOTICE 'Num aleatorios %',numero;
+   IF numero > 0 THEN
+     IF numero = 0 THEN
+	  numero = valor_aleatorio_entre(-50,50);
+	 END IF;
+     num_positivos = num_positivos + 1;
+   END IF;
+  END LOOP;
+  RAISE NOTICE 'Total de Numeros positivos: %',num_positivos;
+END
+$$
+
+-- ****************
 -- Prints Integers
 -- btw -50 and +50
 -- ****************
@@ -121,7 +222,7 @@ $$
 DECLARE
  counter INT := -51;
 BEGIN
- RAISE NOTICE 'Basic LOOP';
+ RAISE NOTICE 'While LOOP';
  WHILE counter <= 50 LOOP 
   counter = counter + 1;
   RAISE NOTICE '%',counter;
@@ -298,12 +399,42 @@ $$
 -- ### 1.1 ENDS ### ---
 
 
-DO
-$$
+-- ### 1.2 BEGINS ### ---
+
+-- 1.2 Faça um programa que calcule o determinante de 
+-- uma matriz quadrada de ordem 3 utilizando a regra de Sarrus. Veja a regra aqui:
+-- https://en.wikipedia.org/wiki/Rule_of_Sarrus
+-- Preencha a matriz com valores inteiros aleatórios
+-- no intervalo de 1 a 12.
+-- **
+-- using the func() that generates 
+-- a random numer btw 1and12
+-- valor_aleatorio_entre(floor,cealing)
+DO $$
 DECLARE
 
+    -- multi dimensional
+	-- matrix as array
+	-- fill it up with random numbers...
+    matriz INT[][] := ARRAY[
+      [valor_aleatorio_entre(1,12), valor_aleatorio_entre(1,12), valor_aleatorio_entre(1,12)],
+      [valor_aleatorio_entre(1,12), valor_aleatorio_entre(1,12), valor_aleatorio_entre(1,12)],
+      [valor_aleatorio_entre(1,12), valor_aleatorio_entre(1,12), valor_aleatorio_entre(1,12)]
+    ];
+    -- m will hold the determinated
+	-- matrix result
+    m INT;
 BEGIN
-
-END;
-$$
-
+    -- Exibindo a matriz
+    RAISE NOTICE 'Matriz: %', matriz;
+	
+	-- Calculates the determinated using Sarrus rules
+    m := matriz[1][1] * matriz[2][2] * matriz[3][3] +
+                     matriz[1][2] * matriz[2][3] * matriz[3][1] +
+                     matriz[1][3] * matriz[2][1] * matriz[3][2] -
+                     (matriz[1][3] * matriz[2][2] * matriz[3][1] +
+                      matriz[1][1] * matriz[2][3] * matriz[3][2] +
+                      matriz[1][2] * matriz[2][1] * matriz[3][3]);
+    RAISE NOTICE 'Determinante: %', m;
+END $$;
+-- ### 1.2 ENDS ### ---
